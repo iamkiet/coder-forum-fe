@@ -10,8 +10,10 @@ import {
   Typography,
 } from 'antd';
 import React, { useMemo } from 'react';
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { useInfiniteQuery, useMutation } from 'react-query';
 import { useParams } from 'react-router-dom';
+import remarkGfm from 'remark-gfm';
 import { createComment, getCommentReplies } from '../../../../apis';
 
 const Comment = ({ record }) => {
@@ -56,7 +58,11 @@ const Comment = ({ record }) => {
       const x = flatten(data.pages);
       return x.map((comment, index) => (
         <Typography.Text key={index}>
-          Anonymous: {comment.message}
+          Anonymous:{' '}
+          <ReactMarkdown
+            children={comment.message}
+            remarkPlugins={[remarkGfm]}
+          />
         </Typography.Text>
       ));
     }
@@ -72,7 +78,8 @@ const Comment = ({ record }) => {
   return (
     <Skeleton loading={isFetching} style={{ margin: '20px' }}>
       <div>
-        {record.author}: {record.message}
+        {record.author}:{' '}
+        <ReactMarkdown children={record.message} remarkPlugins={[remarkGfm]} />
       </div>
       <div>
         <Typography.Text>Reply region</Typography.Text>
