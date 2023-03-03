@@ -5,10 +5,13 @@ const url = 'https://coder-forum-api.onrender.com/api/v1/';
 export const API = axios.create({
   baseURL: url,
   timeout: 1000,
-  headers: {
-    'x-access-token': localStorage.getItem('token'),
-    // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNmZGZkNTdhZjJjYzBlMjUwZDlhY2QzIiwiZW1haWwiOiJraWV0bmd1eWVuLm1lQGdtYWlsLmNvbSIsImlhdCI6MTY3NzgwNzY0OSwiZXhwIjoxNjc3ODE0ODQ5fQ.53lDJc4ydrWDSiBmFZ1A8FHNoOz40paNjYtbmxdiCZ8',
-  },
+});
+
+API.interceptors.request.use(function (config) {
+  const token = localStorage.getItem('token');
+  config.headers['x-access-token'] = token;
+
+  return config;
 });
 
 API.interceptors.response.use(
